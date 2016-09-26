@@ -3,6 +3,7 @@ package com.agar.tab.adapter.recyclerView;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,11 @@ import android.widget.TextView;
 
 import com.agar.tab.R;
 import com.agar.tab.model.Item;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
 
 import java.util.List;
 
@@ -21,10 +27,12 @@ public class RssFeedAdapter extends RecyclerView.Adapter<RssFeedAdapter.ViewHold
 
     private List<Item> items;
     private Context mContext;
+    private ImageLoader imageLoader;
 
     public RssFeedAdapter(List<Item> items, Context mContext){
         this.items = items;
         this.mContext = mContext;
+        this.imageLoader = ImageLoader.getInstance();
     }
 
     private Context getContext(){
@@ -46,11 +54,13 @@ public class RssFeedAdapter extends RecyclerView.Adapter<RssFeedAdapter.ViewHold
         holder.mTitle.setText(item.getTitle());
         holder.mDescription.setText(item.getDescription());
         holder.mPubDate.setText(item.getPubDate());
-        //holder.mImageView.s
+        ImageSize imageSize = new ImageSize(80, 80);
+        this.imageLoader.displayImage(item.getEnclosure().getUrl(), holder.mImageView, imageSize);
     }
 
     @Override
     public int getItemCount() {
+        Log.i("RssFeedAdapter", Integer.toString(this.items.size()));
         return this.items==null ? 0 : this.items.size();
     }
 

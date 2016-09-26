@@ -12,6 +12,6 @@ public class Util {
     public static void init(){
         map.put("actualites", "http://www.france24.com/fr/actualites/rss");
         map.put("sports", "http://www.france24.com/fr/sports/rss");
-        map.put("eco-tech","http://www.france24.com/fr/eco-tech/rss");
+        map.put("eco-tech","http://www.france24.com/fr/culture/rss");
     }
 }

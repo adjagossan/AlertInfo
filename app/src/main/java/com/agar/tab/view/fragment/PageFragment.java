@@ -29,6 +29,7 @@ public class PageFragment extends Fragment {
     private String mPage;
     private static Fragment mFragment;
     private PageFragmentPresenter presenter;
+    private RssFeedAdapter rssFeedAdapter;
 
     private Fragment getInstance(){
         return mFragment;
@@ -43,6 +44,7 @@ public class PageFragment extends Fragment {
     }
 
     public void setItem(List<Item> items){
+        Log.i("PageFragment+", Integer.toString(items.size()));
         getArguments().putParcelableArrayList(ARG_ITEM, new ArrayList<Parcelable>(items));
     }
 
@@ -60,25 +62,24 @@ public class PageFragment extends Fragment {
         presenter = new PageFragmentPresenter();
         presenter.attachView(this);
         mPage = getArguments().getString(ARG_PAGE);
-        Log.i(this.getClass().getCanonicalName(), Util.map.get(mPage));
         presenter.loadData(Util.map.get(mPage));
-
+        //Log.i("PageFragment+++", Integer.toString(getItem().size()));
+        rssFeedAdapter = new RssFeedAdapter(presenter.getItems()/*getItem()*/, getContext());
+        setRetainInstance(true);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_page, container, false);
-
-        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
-        //Log.i("PageFragment", Integer.toString(getItem().size()));
-        RssFeedAdapter rssFeedAdapter = new RssFeedAdapter(getItem(), getContext());
-        recyclerView.setAdapter(rssFeedAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        //TextView textView = (TextView)view.findViewById(R.id.tvTitle);
-        //textView.setText("Fragment #"+mPage);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(rssFeedAdapter);
     }
 
     @Override

@@ -24,6 +24,10 @@ public class PageFragmentPresenter implements Presenter<PageFragment> {
     private Subscription subscription;
     private List<Item> items = new ArrayList();
 
+    public List<Item> getItems(){
+        return items;
+    }
+
     @Override
     public void attachView(PageFragment view) {
         this.fragment = view;

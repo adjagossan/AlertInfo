@@ -8,6 +8,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 /**
  * Created by Gossan on 21/09/2016.
@@ -21,6 +22,7 @@ public class App extends Application {
         Util.init();
 
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+                //.displayer(new RoundedBitmapDisplayer(50))
                 .showImageOnFail(R.drawable.ic_launcher_chrome)
                 .showImageOnLoading(R.drawable.ic_launcher_chrome)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)

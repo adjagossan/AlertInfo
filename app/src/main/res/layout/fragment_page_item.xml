@@ -2,8 +2,7 @@
 <LinearLayout xmlns:cardView="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-
-    android:layout_margin="2dp"
+    android:layout_margin="5dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -28,8 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/ic_launcher_chrome"/>
+        android:layout_centerVertical="true"/>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -44,11 +42,11 @@
             android:text="@string/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:inputType="textMultiLine"
-            android:textColor="@android:color/holo_blue_dark"
-            android:layout_marginBottom="8dp"/>
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="6dp"/>
 
         <TextView
             android:id="@+id/description"
@@ -60,7 +58,7 @@
             android:textSize="15sp"
             android:minLines="1"
             android:maxLines="2"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="6dp"/>
 
         <TextView
             android:id="@+id/pubDate"
