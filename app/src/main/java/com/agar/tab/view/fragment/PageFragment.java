@@ -27,13 +27,8 @@ public class PageFragment extends Fragment {
     static final String ARG_PAGE = "ARG_PAGE";
     static final String ARG_ITEM = "ARG_ITEM";
     private String mPage;
-    private static Fragment mFragment;
     private PageFragmentPresenter presenter;
     private RssFeedAdapter rssFeedAdapter;
-
-    private Fragment getInstance(){
-        return mFragment;
-    }
 
     private String getPage(){
         return getArguments().getString(ARG_PAGE);
@@ -44,14 +39,13 @@ public class PageFragment extends Fragment {
     }
 
     public void setItem(List<Item> items){
-        Log.i("PageFragment+", Integer.toString(items.size()));
         getArguments().putParcelableArrayList(ARG_ITEM, new ArrayList<Parcelable>(items));
     }
 
     public static Fragment newInstance(String pageName){
         Bundle args = new Bundle();
         args.putString(ARG_PAGE, pageName);
-        mFragment = new PageFragment();
+        PageFragment mFragment = new PageFragment();
         mFragment.setArguments(args);
         return mFragment;
     }
@@ -63,9 +57,6 @@ public class PageFragment extends Fragment {
         presenter.attachView(this);
         mPage = getArguments().getString(ARG_PAGE);
         presenter.loadData(Util.map.get(mPage));
-        //Log.i("PageFragment+++", Integer.toString(getItem().size()));
-        rssFeedAdapter = new RssFeedAdapter(presenter.getItems()/*getItem()*/, getContext());
-        setRetainInstance(true);
     }
 
     @Nullable
@@ -79,7 +70,9 @@ public class PageFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        rssFeedAdapter = new RssFeedAdapter(getContext());
         recyclerView.setAdapter(rssFeedAdapter);
+
     }
 
     @Override

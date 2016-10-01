@@ -1,7 +1,11 @@
 package com.agar.tab.presenter;
 
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
+import com.agar.tab.R;
+import com.agar.tab.adapter.recyclerView.RssFeedAdapter;
 import com.agar.tab.data.DataHelper;
 import com.agar.tab.model.Item;
 import com.agar.tab.model.Rss;
@@ -25,7 +29,11 @@ public class PageFragmentPresenter implements Presenter<PageFragment> {
     private List<Item> items = new ArrayList();
 
     public List<Item> getItems(){
-        return items;
+        return this.items;
+    }
+
+    public void setItems(List<Item> items){
+        this.items.addAll(items);
     }
 
     @Override
@@ -48,22 +56,28 @@ public class PageFragmentPresenter implements Presenter<PageFragment> {
     }
 
     public void loadData(String url){
+        Log.i("url", url);
         if(subscription != null)
             subscription.unsubscribe();
 
-        /*Observable<Rss> observable = Observable.create(subscriber -> {
-            subscriber.onNext(DataHelper.getRssFeed(url));
-            subscriber.onCompleted();
-        });*/
-
-        subscription = /*observable*/getFeed(url)
+        subscription = getFeed(url)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .onErrorResumeNext(error -> Observable.empty())
-                .subscribe(
-                        rss -> items.addAll(rss.getChannel().getItem()),
-                        error -> error.getMessage(),
-                        () -> {Log.i("rxjava", Integer.toString(items.size()));fragment.setItem(items);}
+                .subscribe
+                        (
+                            rss -> this.setItems(rss.getChannel().getItem()),
+                            error -> error.getMessage(),
+                            () -> {
+                                if(fragment != null){
+                                    View view = fragment.getView();
+                                    RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+                                    RssFeedAdapter adapter = (RssFeedAdapter) recyclerView.getAdapter();
+                                    adapter.setItems(this.items);
+                                    fragment.setRetainInstance(true);
+                                    //fragment.getAdapter().setItems(this.items);
+                                }
+                            }
                         );
     }
 }

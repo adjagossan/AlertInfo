@@ -23,8 +23,8 @@ public class App extends Application {
 
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 //.displayer(new RoundedBitmapDisplayer(50))
-                .showImageOnFail(R.drawable.ic_launcher_chrome)
-                .showImageOnLoading(R.drawable.ic_launcher_chrome)
+                //.showImageOnFail(R.drawable.ic_launcher_chrome)
+                //.showImageOnLoading(R.drawable.ic_launcher_chrome)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
                 .cacheInMemory(true)
                 //.cacheOnDisk(true)

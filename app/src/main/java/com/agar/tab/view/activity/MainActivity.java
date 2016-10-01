@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     SampleFragmentPagerAdapter fragmentPagerAdapter;
+    final int limit = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +32,11 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
-        final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
+        final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources()
                 .getDisplayMetrics());
         viewPager.setPageMargin(pageMargin);
+
+        //viewPager.setOffscreenPageLimit(limit);
 
         fragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager(),
                 MainActivity.this);
@@ -42,55 +45,4 @@ public class MainActivity extends AppCompatActivity {
         PagerSlidingTabStrip pagerSlidingTabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         pagerSlidingTabStrip.setViewPager(viewPager);
     }
-
-    /*
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        //loadList();
-    }
-
-    @TargetApi(Build.VERSION_CODES.N)
-    private Observable<List<Item>> getFeed(){
-        return Observable.create(subscriber -> {
-            List<Rss> list =  DataHelper.getData();
-            for(Rss rss : list){
-                subscriber.onNext(rss.getChannel().getItem());
-            }
-            //list.forEach(rss -> subscriber.onNext(rss.getChannel().getItem()));
-            subscriber.onCompleted();
-        });
-    }
-
-    private int count;
-
-    private void loadList(){
-        count = 0;
-        Subscriber<List<Item>> subscriber = new Subscriber<List<Item>>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(List<Item> items) {
-                View view = fragmentPagerAdapter.getRegisteredFragment(count).getView();
-                RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-                RssFeedAdapter adapter = (RssFeedAdapter) recyclerView.getAdapter();
-                adapter.setItems(items);
-                count++;
-            }
-        };
-
-        getFeed()
-                .onBackpressureBuffer()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
-    }*/
 }
