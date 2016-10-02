@@ -32,6 +32,12 @@ public class RssFeedAdapter extends RecyclerView.Adapter<RssFeedAdapter.ViewHold
         this.imageLoader = ImageLoader.getInstance();
     }
 
+    public RssFeedAdapter(List<Item> items, Context mContext){
+        this.items = items;
+        this.mContext = mContext;
+        this.imageLoader = ImageLoader.getInstance();
+    }
+
     private Context getContext(){
         return mContext;
     }
@@ -47,11 +53,12 @@ public class RssFeedAdapter extends RecyclerView.Adapter<RssFeedAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        //holder.mCardView.geth
         Item item = items.get(position);
         holder.mTitle.setText(item.getTitle());
         holder.mDescription.setText(item.getDescription());
         holder.mPubDate.setText(item.getPubDate());
-        ImageSize imageSize = new ImageSize(80, 80);
+        ImageSize imageSize = new ImageSize(40, 40);
         this.imageLoader.displayImage(item.getEnclosure().getUrl(), holder.mImageView, imageSize);
     }
 

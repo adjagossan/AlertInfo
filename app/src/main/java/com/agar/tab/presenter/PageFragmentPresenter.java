@@ -1,7 +1,6 @@
 package com.agar.tab.presenter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.agar.tab.R;
@@ -33,6 +32,7 @@ public class PageFragmentPresenter implements Presenter<PageFragment> {
     }
 
     public void setItems(List<Item> items){
+        this.items.clear();
         this.items.addAll(items);
     }
 
@@ -56,7 +56,6 @@ public class PageFragmentPresenter implements Presenter<PageFragment> {
     }
 
     public void loadData(String url){
-        Log.i("url", url);
         if(subscription != null)
             subscription.unsubscribe();
 
@@ -68,16 +67,16 @@ public class PageFragmentPresenter implements Presenter<PageFragment> {
                         (
                             rss -> this.setItems(rss.getChannel().getItem()),
                             error -> error.getMessage(),
-                            () -> {
-                                if(fragment != null){
-                                    View view = fragment.getView();
-                                    RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-                                    RssFeedAdapter adapter = (RssFeedAdapter) recyclerView.getAdapter();
-                                    adapter.setItems(this.items);
-                                    fragment.setRetainInstance(true);
-                                    //fragment.getAdapter().setItems(this.items);
-                                }
-                            }
+                            () -> update()
                         );
+    }
+
+    public void update(){
+        if(fragment != null){
+            View view = fragment.getView();
+            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+            RssFeedAdapter adapter = (RssFeedAdapter) recyclerView.getAdapter();
+            adapter.setItems(this.items);
+        }
     }
 }

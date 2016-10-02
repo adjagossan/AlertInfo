@@ -14,7 +14,6 @@ public class MainActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     SampleFragmentPagerAdapter fragmentPagerAdapter;
-    final int limit = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +34,6 @@ public class MainActivity extends AppCompatActivity {
         final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources()
                 .getDisplayMetrics());
         viewPager.setPageMargin(pageMargin);
-
-        //viewPager.setOffscreenPageLimit(limit);
 
         fragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager(),
                 MainActivity.this);
