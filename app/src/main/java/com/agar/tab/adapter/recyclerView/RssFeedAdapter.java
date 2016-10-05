@@ -4,11 +4,14 @@ import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.agar.tab.R;
 import com.agar.tab.model.Item;
@@ -18,6 +21,8 @@ import com.nostra13.universalimageloader.core.assist.ImageSize;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.subjects.PublishSubject;
+
 /**
  * Created by Gossan on 21/09/2016.
  */
@@ -26,6 +31,11 @@ public class RssFeedAdapter extends RecyclerView.Adapter<RssFeedAdapter.ViewHold
     private List<Item> items = new ArrayList<>();
     private Context mContext;
     private ImageLoader imageLoader;
+    private PublishSubject<String> publishSubject = PublishSubject.create();
+
+    public PublishSubject<String> getPublishSubject(){
+        return publishSubject;
+    }
 
     public RssFeedAdapter(Context mContext){
         this.mContext = mContext;
@@ -48,18 +58,27 @@ public class RssFeedAdapter extends RecyclerView.Adapter<RssFeedAdapter.ViewHold
         LayoutInflater inflater = LayoutInflater.from(context);
         View rssFeedView = inflater.inflate(R.layout.fragment_page_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(rssFeedView);
+        viewHolder.itemView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.i("onBindViewHolder","clicked!");
+                Toast.makeText(getContext(), "clicked!", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        //holder.mCardView.geth
         Item item = items.get(position);
         holder.mTitle.setText(item.getTitle());
         holder.mDescription.setText(item.getDescription());
         holder.mPubDate.setText(item.getPubDate());
+        holder.mLink.setText(item.getLink().link);
         ImageSize imageSize = new ImageSize(40, 40);
         this.imageLoader.displayImage(item.getEnclosure().getUrl(), holder.mImageView, imageSize);
+
     }
 
     @Override
@@ -80,6 +99,7 @@ public class RssFeedAdapter extends RecyclerView.Adapter<RssFeedAdapter.ViewHold
         public TextView mTitle;
         public TextView mDescription;
         public TextView mPubDate;
+        public TextView mLink;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -88,6 +108,12 @@ public class RssFeedAdapter extends RecyclerView.Adapter<RssFeedAdapter.ViewHold
             this.mTitle = (TextView)itemView.findViewById(R.id.title);
             this.mDescription = (TextView)itemView.findViewById(R.id.description);
             this.mPubDate = (TextView)itemView.findViewById(R.id.pubDate);
+            this.mLink = (TextView) itemView.findViewById(R.id.link);
+            /*itemView.setOnClickListener(v -> {
+                Log.i("onBindViewHolder","clicked!");
+                Toast.makeText(itemView.getContext(), "clicked!", Toast.LENGTH_SHORT).show();
+                //RssFeedAdapter.this.publishSubject.onNext(mLink.getText().toString());
+            });*/
         }
     }
 }

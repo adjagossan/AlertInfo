@@ -1,5 +1,7 @@
 package com.agar.tab.view.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -8,9 +10,10 @@ import android.util.TypedValue;
 
 import com.agar.tab.R;
 import com.agar.tab.adapter.viewPager.SampleFragmentPagerAdapter;
+import com.agar.tab.view.fragment.PageFragment;
 import com.astuetz.PagerSlidingTabStrip;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PageFragment.OnItemSelectedListener {
 
     ViewPager viewPager;
     SampleFragmentPagerAdapter fragmentPagerAdapter;
@@ -41,5 +44,12 @@ public class MainActivity extends AppCompatActivity {
 
         PagerSlidingTabStrip pagerSlidingTabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         pagerSlidingTabStrip.setViewPager(viewPager);
+    }
+
+    @Override
+    public void onRssItemSelected(String link) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(link));
+        startActivity(intent);
     }
 }

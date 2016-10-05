@@ -1,5 +1,6 @@
 package com.agar.tab.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,12 @@ public class PageFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private String mPage;
     private PageFragmentPresenter presenter;
+    private OnItemSelectedListener listener;
+
+    public interface OnItemSelectedListener{
+        void onRssItemSelected(String link);
+    }
+
 
     public static Fragment newInstance(String pageName){
         Bundle args = new Bundle();
@@ -28,6 +35,15 @@ public class PageFragment extends Fragment {
         PageFragment mFragment = new PageFragment();
         mFragment.setArguments(args);
         return mFragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(context instanceof OnItemSelectedListener)
+            listener = (OnItemSelectedListener)context;
+        else
+            throw new ClassCastException(context.toString()+" must implement PageFragment.OnItemSelectedListener");
     }
 
     @Override
@@ -52,6 +68,7 @@ public class PageFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         RssFeedAdapter rssFeedAdapter = new RssFeedAdapter(getContext());
+        rssFeedAdapter.getPublishSubject().subscribe(link -> listener.onRssItemSelected(link));
         recyclerView.setAdapter(rssFeedAdapter);
         if(!presenter.getItems().isEmpty())
             presenter.update();

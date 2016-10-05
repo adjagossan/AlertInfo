@@ -13,10 +13,4 @@
         android:background="@android:color/background_light"
         android:layout_alignParentTop="true"/>
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:text="Fragment #X"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center" />
 </android.support.v4.widget.SwipeRefreshLayout>
