@@ -3,9 +3,12 @@ package com.agar.tab.adapter.viewPager;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 
 import com.agar.tab.view.fragment.PageFragment;
 import com.agar.tab.utils.Util;
+
+import java.util.Map;
 
 /**
  * Created by Gossan on 13/09/2016.
@@ -21,12 +24,13 @@ public class SampleFragmentPagerAdapter extends SmartFragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Fragment f = this.getRegisteredFragment(position);
-        if(f == null){
-            String pageName = (String)(Util.map.keySet().toArray()[position]);
-            f = PageFragment.newInstance(pageName);
+        for(Map.Entry<String, String> entry : Util.map.entrySet()){
+            Log.i("PagerAdapter1", entry.getKey());
         }
-        return f/*PageFragment.newInstance(pageName)*/;
+
+        String pageName = (String)(Util.map.keySet().toArray()[position]);
+        Log.i("PagerAdapter2", position+" "+pageName);
+        return PageFragment.newInstance(pageName);
     }
 
     @Override
@@ -36,6 +40,7 @@ public class SampleFragmentPagerAdapter extends SmartFragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
+        Log.i("PagerAdapter3", position+" "+(Util.map.keySet().toArray()[position]));
         return (String)(Util.map.keySet().toArray()[position]);
     }
 }

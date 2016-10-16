@@ -23,18 +23,17 @@ import okhttp3.Response;
 public class DataHelper {
     private static Rss rss;
 
-    public static List<Rss> getData(){
+    /*public static List<Rss> getData(){
         List<Rss> list = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Util.map.entrySet().forEach(e -> list.add(getRssFeed(e.getValue())));
         }
         return list;
-    }
+    }*/
 
     public static Rss getRssFeed(String url){
         String content = run(url);
         serialize(content);
-        Log.i("DataHelper", rss.toString());
         return rss;
     }
 
@@ -51,7 +50,6 @@ public class DataHelper {
         try {
             response = client.newCall(request).execute();
             content = response.body().string();
-
         } catch (IOException e) {
             e.printStackTrace();
         }

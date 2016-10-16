@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,13 +14,12 @@ import android.widget.Toast;
 
 import com.agar.tab.R;
 import com.agar.tab.model.Item;
+import com.agar.tab.view.activity.MainActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import rx.subjects.PublishSubject;
 
 /**
  * Created by Gossan on 21/09/2016.
@@ -31,11 +29,6 @@ public class RssFeedAdapter extends RecyclerView.Adapter<RssFeedAdapter.ViewHold
     private List<Item> items = new ArrayList<>();
     private Context mContext;
     private ImageLoader imageLoader;
-    private PublishSubject<String> publishSubject = PublishSubject.create();
-
-    public PublishSubject<String> getPublishSubject(){
-        return publishSubject;
-    }
 
     public RssFeedAdapter(Context mContext){
         this.mContext = mContext;
@@ -58,14 +51,6 @@ public class RssFeedAdapter extends RecyclerView.Adapter<RssFeedAdapter.ViewHold
         LayoutInflater inflater = LayoutInflater.from(context);
         View rssFeedView = inflater.inflate(R.layout.fragment_page_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(rssFeedView);
-        viewHolder.itemView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Log.i("onBindViewHolder","clicked!");
-                Toast.makeText(getContext(), "clicked!", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
         return viewHolder;
     }
 
@@ -78,7 +63,6 @@ public class RssFeedAdapter extends RecyclerView.Adapter<RssFeedAdapter.ViewHold
         holder.mLink.setText(item.getLink().link);
         ImageSize imageSize = new ImageSize(40, 40);
         this.imageLoader.displayImage(item.getEnclosure().getUrl(), holder.mImageView, imageSize);
-
     }
 
     @Override
@@ -92,7 +76,7 @@ public class RssFeedAdapter extends RecyclerView.Adapter<RssFeedAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public CardView mCardView;
         public ImageView mImageView;
@@ -103,17 +87,20 @@ public class RssFeedAdapter extends RecyclerView.Adapter<RssFeedAdapter.ViewHold
 
         public ViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             this.mCardView = (CardView) itemView.findViewById(R.id.cardView);
             this.mImageView = (ImageView)itemView.findViewById(R.id.imageView);
             this.mTitle = (TextView)itemView.findViewById(R.id.title);
             this.mDescription = (TextView)itemView.findViewById(R.id.description);
             this.mPubDate = (TextView)itemView.findViewById(R.id.pubDate);
             this.mLink = (TextView) itemView.findViewById(R.id.link);
-            /*itemView.setOnClickListener(v -> {
-                Log.i("onBindViewHolder","clicked!");
-                Toast.makeText(itemView.getContext(), "clicked!", Toast.LENGTH_SHORT).show();
-                //RssFeedAdapter.this.publishSubject.onNext(mLink.getText().toString());
-            });*/
+        }
+
+        @Override
+        public void onClick(View v) {
+            v.setSelected(true);
+            MainActivity.getSubject().onNext(this.mLink.getText().toString());
+            //v.setSelected(false);
         }
     }
 }

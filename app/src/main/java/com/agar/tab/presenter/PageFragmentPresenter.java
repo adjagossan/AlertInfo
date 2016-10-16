@@ -2,6 +2,7 @@ package com.agar.tab.presenter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.agar.tab.R;
 import com.agar.tab.adapter.recyclerView.RssFeedAdapter;
@@ -74,9 +75,11 @@ public class PageFragmentPresenter implements Presenter<PageFragment> {
     public void update(){
         if(fragment != null){
             View view = fragment.getView();
+            ProgressBar progressBar = (ProgressBar)view.findViewById(R.id.progressBar);
             RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
             RssFeedAdapter adapter = (RssFeedAdapter) recyclerView.getAdapter();
             adapter.setItems(this.items);
+            progressBar.setVisibility(View.GONE);
         }
     }
 }

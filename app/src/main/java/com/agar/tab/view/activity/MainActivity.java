@@ -6,17 +6,22 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 
 import com.agar.tab.R;
 import com.agar.tab.adapter.viewPager.SampleFragmentPagerAdapter;
-import com.agar.tab.view.fragment.PageFragment;
 import com.astuetz.PagerSlidingTabStrip;
 
-public class MainActivity extends AppCompatActivity implements PageFragment.OnItemSelectedListener {
+import rx.Subscription;
+import rx.subjects.PublishSubject;
+
+public class MainActivity extends AppCompatActivity{
 
     ViewPager viewPager;
     SampleFragmentPagerAdapter fragmentPagerAdapter;
+    static PublishSubject<String> publishSubject = PublishSubject.create();
+    private Subscription subscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +49,25 @@ public class MainActivity extends AppCompatActivity implements PageFragment.OnIt
 
         PagerSlidingTabStrip pagerSlidingTabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         pagerSlidingTabStrip.setViewPager(viewPager);
+
+        subscription = publishSubject.subscribe(link -> this.onRssItemSelected(link));
     }
 
     @Override
-    public void onRssItemSelected(String link) {
+    protected void onDestroy() {
+        super.onDestroy();
+        if(subscription != null)
+            subscription.unsubscribe();
+    }
+
+    private void onRssItemSelected(String link) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(link));
         startActivity(intent);
     }
+
+    public static PublishSubject<String> getSubject(){
+        return publishSubject;
+    }
+
 }
