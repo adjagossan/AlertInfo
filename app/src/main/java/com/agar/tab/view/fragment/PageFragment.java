@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -66,6 +67,14 @@ public class PageFragment extends Fragment {
             presenter.update();
         if(view != null)
             showSnackBar(view);
+
+        SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        mSwipeRefreshLayout.setOnRefreshListener(()-> onRefresh());
+    }
+
+    private void onRefresh(){
+        presenter.refresh(Util.map.get(mPage));
     }
 
     @Override
@@ -96,5 +105,9 @@ public class PageFragment extends Fragment {
     public void onDestroy() {
         presenter.detachView(this);
         super.onDestroy();
+    }
+
+    public PageFragmentPresenter getPresenter() {
+        return presenter;
     }
 }

@@ -1,5 +1,6 @@
 package com.agar.tab.presenter;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -27,6 +28,7 @@ public class PageFragmentPresenter implements Presenter<PageFragment> {
     private PageFragment fragment;
     private Subscription subscription;
     private List<Item> items = new ArrayList();
+    private List<Item> newItems = new ArrayList();
 
     public List<Item> getItems(){
         return this.items;
@@ -80,6 +82,44 @@ public class PageFragmentPresenter implements Presenter<PageFragment> {
             RssFeedAdapter adapter = (RssFeedAdapter) recyclerView.getAdapter();
             adapter.setItems(this.items);
             progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    public void refresh(String url){
+
+        if(subscription != null)
+            subscription.unsubscribe();
+
+        subscription = getFeed(url)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .onErrorResumeNext(error -> Observable.empty())
+                .subscribe
+                        (
+                                rss -> newItems = rss.getChannel().getItem(),
+                                error -> error.getMessage(),
+                                () -> filter()
+                        );
+    }
+
+    private void filter(){
+        List<Item> newValues = new ArrayList<>();
+
+        for(Item item : newItems){
+            if(item.equals(items.get(0))) {
+                //newValues.add(item);
+                break;
+            }else
+                newValues.add(item);
+        }
+
+        if(fragment != null){
+            View view = fragment.getView();
+            SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+            RssFeedAdapter adapter = (RssFeedAdapter) recyclerView.getAdapter();
+            adapter.addItems(newValues);
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 }

@@ -22,6 +22,12 @@ public class Item implements Parcelable {
     @Element(required = false)
     private Enclosure enclosure;
 
+    @Override
+    public boolean equals(Object obj) {
+        Item item = (Item)obj;
+        return this.link.link.contentEquals(item.link.link);
+    }
+
     public String getTitle() {
         return title;
     }

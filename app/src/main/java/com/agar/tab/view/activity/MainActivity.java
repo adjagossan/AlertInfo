@@ -7,9 +7,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.agar.tab.R;
 import com.agar.tab.adapter.viewPager.SampleFragmentPagerAdapter;
+import com.agar.tab.utils.Util;
+import com.agar.tab.view.fragment.PageFragment;
 import com.astuetz.PagerSlidingTabStrip;
 
 import rx.Subscription;
@@ -57,6 +63,30 @@ public class MainActivity extends AppCompatActivity{
         super.onDestroy();
         if(subscription != null)
             subscription.unsubscribe();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actions, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_refresh:
+                int currentItem = viewPager.getCurrentItem();
+                PageFragment fm = (PageFragment)fragmentPagerAdapter.getFragments().get(currentItem);
+                ProgressBar pb = (ProgressBar) fm.getView().findViewById(R.id.progressBar);
+                pb.setVisibility(View.VISIBLE);
+                String mPage = fm.getArguments().getString("ARG_PAGE");
+                fm.getPresenter().refresh(Util.map.get(mPage));
+                pb.setVisibility(View.GONE);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void onRssItemSelected(String link) {

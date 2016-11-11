@@ -43,4 +43,8 @@ public class SampleFragmentPagerAdapter extends SmartFragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         return (String)(Util.map.keySet().toArray()[position]);
     }
+
+    public SparseArray<Fragment> getFragments() {
+        return fragments;
+    }
 }

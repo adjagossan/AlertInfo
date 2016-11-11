@@ -5,4 +5,6 @@
     <string name="pubdate">lundi 19 septembre 2016 12:26</string>
     <string name="snackBarText">Aucune connexion</string>
     <string name="snackBarAction">REESSAYER</string>
+    <string name="menu_refresh">refresh</string>
+    <string name="menu_about">à propos</string>
 </resources>

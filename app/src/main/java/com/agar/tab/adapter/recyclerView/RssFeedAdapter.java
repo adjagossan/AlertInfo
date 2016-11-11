@@ -74,6 +74,11 @@ public class RssFeedAdapter extends RecyclerView.Adapter<RssFeedAdapter.ViewHold
         notifyDataSetChanged();
     }
 
+    public void addItems(List<Item> items){
+        this.items.addAll(0, items);
+        notifyDataSetChanged();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public CardView mCardView;
