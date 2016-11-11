@@ -105,12 +105,14 @@ public class PageFragmentPresenter implements Presenter<PageFragment> {
     private void filter(){
         List<Item> newValues = new ArrayList<>();
 
-        for(Item item : newItems){
-            if(item.equals(items.get(0))) {
-                //newValues.add(item);
-                break;
-            }else
-                newValues.add(item);
+        if(!items.isEmpty()) {
+            for (Item item : newItems) {
+                if (item.equals(items.get(0))) {
+                    //newValues.add(item);
+                    break;
+                } else
+                    newValues.add(item);
+            }
         }
 
         if(fragment != null){

@@ -3,6 +3,7 @@ package com.agar.tab.view.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -43,6 +44,25 @@ public class MainActivity extends AppCompatActivity{
         setSupportActionBar(toolBar);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                int currentItem = viewPager.getCurrentItem();
+                PageFragment fm = (PageFragment)fragmentPagerAdapter.getFragments().get(currentItem);
+                showSnackBar(fm);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources()
                 .getDisplayMetrics());
@@ -99,4 +119,22 @@ public class MainActivity extends AppCompatActivity{
         return publishSubject;
     }
 
+    private void showSnackBar(PageFragment pf){
+        if(!Util.isConnected()){
+
+            Snackbar.make(pf.getView(), R.string.snackBarText, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.snackBarAction,
+                            v -> {
+                                if(Util.isOnline()) {
+                                    pf.getView().findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+                                    String mPage = pf.getArguments().getString("ARG_PAGE");
+                                    pf.getPresenter().loadData(Util.map.get(mPage));
+                                }else
+                                    pf.getView().findViewById(R.id.progressBar).setVisibility(View.GONE);
+                                showSnackBar(pf);
+                            })
+                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_dark))
+                    .show();
+        }
+    }
 }

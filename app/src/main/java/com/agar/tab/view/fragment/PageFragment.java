@@ -24,6 +24,7 @@ public class PageFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private String mPage;
     private PageFragmentPresenter presenter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public static Fragment newInstance(String pageName){
         Bundle args = new Bundle();
@@ -42,7 +43,7 @@ public class PageFragment extends Fragment {
         presenter.attachView(this);
 
         mPage = getArguments().getString(ARG_PAGE);
-        if(Util.isConnected() && presenter.getItems().isEmpty())
+        if(/*Util.isConnected() &&*/ presenter.getItems().isEmpty())
             presenter.loadData(Util.map.get(mPage));
         setRetainInstance(true);
     }
@@ -65,40 +66,22 @@ public class PageFragment extends Fragment {
         recyclerView.setAdapter(rssFeedAdapter);
         if(!presenter.getItems().isEmpty())
             presenter.update();
-        if(view != null)
-            showSnackBar(view);
 
-        SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         mSwipeRefreshLayout.setOnRefreshListener(()-> onRefresh());
     }
 
     private void onRefresh(){
-        presenter.refresh(Util.map.get(mPage));
+        if(Util.isConnected())
+            presenter.refresh(Util.map.get(mPage));
+        else
+            mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //showSnackBar(getView());
-    }
-
-    private void showSnackBar(View view){
-        if(!Util.isConnected()){
-
-            Snackbar.make(view, this.getArguments().getString(ARG_PAGE)/*mPageR.string.snackBarText*/, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.snackBarAction,
-                            v -> {
-                                if(Util.isOnline()) {
-                                    view.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-                                    presenter.loadData(Util.map.get(mPage));
-                                }else
-                                    view.findViewById(R.id.progressBar).setVisibility(View.GONE);
-                                    showSnackBar(view);
-                            })
-                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_dark))
-                    .show();
-        }
     }
 
     @Override
