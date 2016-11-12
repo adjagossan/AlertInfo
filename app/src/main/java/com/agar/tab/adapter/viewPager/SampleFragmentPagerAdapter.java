@@ -3,6 +3,7 @@ package com.agar.tab.adapter.viewPager;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 
 import com.agar.tab.view.fragment.PageFragment;
@@ -11,7 +12,7 @@ import com.agar.tab.utils.Util;
 /**
  * Created by Gossan on 13/09/2016.
  */
-public class SampleFragmentPagerAdapter extends SmartFragmentStatePagerAdapter {
+public class SampleFragmentPagerAdapter extends FragmentStatePagerAdapter/*SmartFragmentStatePagerAdapter*/ {
 
     private Context ctx;
     private SparseArray<Fragment> fragments = new SparseArray<>();
@@ -46,5 +47,9 @@ public class SampleFragmentPagerAdapter extends SmartFragmentStatePagerAdapter {
 
     public SparseArray<Fragment> getFragments() {
         return fragments;
+    }
+
+    public void setFragments(SparseArray<Fragment> fragments) {
+        this.fragments = fragments;
     }
 }
