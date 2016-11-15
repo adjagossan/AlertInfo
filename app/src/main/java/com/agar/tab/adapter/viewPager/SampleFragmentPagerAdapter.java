@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
+import android.view.ViewGroup;
 
 import com.agar.tab.view.fragment.PageFragment;
 import com.agar.tab.utils.Util;
@@ -25,7 +26,7 @@ public class SampleFragmentPagerAdapter extends FragmentStatePagerAdapter/*Smart
     @Override
     public Fragment getItem(int position) {
 
-        if(fragments.get(position, null) != null)
+        if(fragments.get(position/*, null*/) != null)
             return fragments.get(position);
         else {
             String pageName = (String)(Util.map.keySet().toArray()[position]);
@@ -34,6 +35,12 @@ public class SampleFragmentPagerAdapter extends FragmentStatePagerAdapter/*Smart
             return fm;
         }
     }
+
+    /*@Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        fragments.remove(position);
+        super.destroyItem(container, position, object);
+    }*/
 
     @Override
     public int getCount() {

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tab</string>
+    <string name="app_name">AlertInfo</string>
     <string name="title">La guerre de territoire entre François Bayrou et Emmanuel Macron</string>
     <string name="description">Aucun des deux n’est, à ce jour, officiellement candidat à la présidentielle. Mais l’entrée en campagne de l’ex-ministre Emmanuel Macron, qui s’installe sur son terrain politique, irrite François Bayrou, le patron du MoDem.</string>
     <string name="pubdate">lundi 19 septembre 2016 12:26</string>
@@ -7,4 +7,9 @@
     <string name="snackBarAction">REESSAYER</string>
     <string name="menu_refresh">refresh</string>
     <string name="menu_about">à propos</string>
+    <string name="developer">ADJA Gossan</string>
+    <string name="mail">adjagossan@gmail.com</string>
+    <string name="school">Master 2 - MIAGE - Université Rennes 1</string>
+    <string name="year">Année universitaire 2016 - 2017</string>
+    <string name="ok">OK</string>
 </resources>
